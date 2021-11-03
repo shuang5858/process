@@ -5,7 +5,7 @@
 */
 
 echo "begin".PHP_EOL;
-// $aConfig = file_get_contents('./proess_config');
+$aConfig = include('./config.php');
 
 $iForkNum = $aConfig['process_num'] = 3;
 $aChildPid = [];
