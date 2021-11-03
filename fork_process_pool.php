@@ -25,7 +25,6 @@ if(!empty($iForkNum)){
 	while (count($aChildPid) > 0 ){
 		foreach($aChildPid as $iKey => $iPid) {
 			$iRet = pcntl_waitpid($iPid, $iStatus, WNOHANG);
-		    // echo "waipid不阻塞".PHP_EOL;
 		    if ($iRet > 0) {
 
 		        unset($aChildPid[$iKey]);
@@ -36,7 +35,6 @@ if(!empty($iForkNum)){
 		        	$aChildPid[] = $iPid;
 		        }
 
-		  
 				echo json_encode($aChildPid).PHP_EOL;
 		    }
 		}
