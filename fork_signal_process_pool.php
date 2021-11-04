@@ -55,11 +55,8 @@ function getForkProcess()
     if(0 == $iPid){
         cli_set_process_title("lis child process");
 
-        //信号处理
-        pcntl_signal(SIGCHLD,  "sig_handler");
-
         echo '执行创建子进程'.PHP_EOL;
-        sleep(6);
+        sleep(500);
 
         exit;
     }elseif($iPid >0){
