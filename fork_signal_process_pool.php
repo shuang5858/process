@@ -53,6 +53,7 @@ function getForkProcess()
         echo 'fock_error'.PHP_EOL;
     }
     if(0 == $iPid){
+        cli_set_process_title("lis child process");
 
         echo '执行创建子进程'.PHP_EOL;
         sleep(500);
