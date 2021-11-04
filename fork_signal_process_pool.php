@@ -17,16 +17,9 @@ cli_set_process_title("lis master process");
 pcntl_signal(SIGCHLD,  "sig_handler");
 
 if(!empty($iForkNum)){
-
 	for ($i=1; $i <= $iForkNum ; $i++) {
 		$iPid = getForkProcess();
-        if($iPid >0 )
-        { 
-        	$aChildPid[] = $iPid;
-        }
 	}
-
-
 }
 
 sleep(300000);
@@ -35,37 +28,42 @@ sleep(300000);
 function sig_handler($signo)
 {
 	switch ($signo) {
-		 case SIGHUP:
-             //处理SIGHUP信号
-		 	 echo '处理SIGHUP信号';
-             break;
 
-		case SIGCHLD:
-      
-             echo "捕捉到子进程推出...信号回调处理完毕--回收旧的进程，并拉起新的进程补充进程池数量".PHP_EOL;
-             getForkProcess();
-             sleep(3);
+        case SIGHUP:
+            //处理SIGHUP信号
+            echo '处理SIGHUP信号'.PHP_EOL;
+            break;
 
-             break;
+        case SIGCHLD:
+            echo "捕捉信号".PHP_EOL;
+
+            while (pcntl_waitpid(0, $status) != -1) {
+                echo '---子进程退出--'.PHP_EOL;;
+                getForkProcess();
+            }
+            break;
 	}
 }
 
 /** fork()进程 */
 function getForkProcess()
 {
-	$iPid = pcntl_fork();
-	if(-1 == $iPid){
-		echo 'fock_error'.PHP_EOL;
-	}
-	if(0 == $iPid){
-		cli_set_process_title("lis child process");
+    $iPid = pcntl_fork();
+    if(-1 == $iPid){
+        echo 'fock_error'.PHP_EOL;
+    }
+    if(0 == $iPid){
+        cli_set_process_title("lis child process");
 
-		echo '子进程执行'.PHP_EOL;
-		sleep(5);
+        //信号处理
+        pcntl_signal(SIGCHLD,  "sig_handler");
 
-		exit;
-	}elseif($iPid >0){
-		return $iPid;
-	}
+        echo '执行创建子进程'.PHP_EOL;
+        sleep(6);
+
+        exit;
+    }elseif($iPid >0){
+        return $iPid;
+    }
 }
 
