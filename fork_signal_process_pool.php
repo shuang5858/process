@@ -22,7 +22,11 @@ if(!empty($iForkNum)){
 	}
 }
 
-sleep(300000);
+while(true){
+    sleep(1);
+}
+
+
 
 /** 信号处理 */
 function sig_handler($signo)
@@ -37,10 +41,10 @@ function sig_handler($signo)
         case SIGCHLD:
             echo "捕捉信号".PHP_EOL;
 
-            while (pcntl_waitpid(0, $status) != -1) {
-                echo '---子进程退出--'.PHP_EOL;;
-                getForkProcess();
-            }
+            $iRes = pcntl_waitpid(-1, $status, WNOHANG);
+            echo $iRes.'---子进程退出--'.PHP_EOL;
+            getForkProcess();
+
             break;
 	}
 }
@@ -63,4 +67,3 @@ function getForkProcess()
         return $iPid;
     }
 }
-
