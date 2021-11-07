@@ -1,7 +1,9 @@
 <?php
 
-include_once('./FockProcess.php');
+include_once('./ForkProcess.php');
 
-$type = new FockProcess();
-$type->forkProcess();
+$type = new ForkProcess();
+$type->start();
+
+
 
