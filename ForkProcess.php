@@ -114,7 +114,7 @@ class ForkProcess
             exit("posix_setsid err".PHP_EOL);
         }
 
-        for ($i = 1; $i <= 100; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             sleep(1);
             file_put_contents('daemon.log', $i.PHP_EOL, FILE_APPEND);
         }
