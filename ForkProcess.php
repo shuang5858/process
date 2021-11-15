@@ -18,6 +18,7 @@ class ForkProcess
 
     public function start()
     {
+        $this->initDaemon();
         cli_set_process_title("lis master process");
         $this->initSignalHandler();
 
@@ -88,6 +89,37 @@ class ForkProcess
     public function initSignalHandler()
     {
         pcntl_signal(SIGCHLD, array($this, 'signalHandler'), true);
+    }
+
+
+    public function initDaemon()
+    {
+        $iPid = pcntl_fork();
+        if ($iPid < 0) {
+            exit("fork err".PHP_EOL);
+        }
+        if ($iPid > 0) {
+            exit;
+        }
+        // fork-twice avoid SVR4 bug
+        $iPid = pcntl_fork();
+        if ($iPid < 0) {
+            exit("fork err".PHP_EOL);
+        }
+        if ($iPid > 0) {
+            exit;
+        }
+        $iRet = posix_setsid();
+        if (-1 === $iRet) {
+            exit("posix_setsid err".PHP_EOL);
+        }
+
+        for ($i = 1; $i <= 100; $i++) {
+            sleep(1);
+            file_put_contents('daemon.log', $i.PHP_EOL, FILE_APPEND);
+        }
+        return $iPid;
+
     }
 
 }
