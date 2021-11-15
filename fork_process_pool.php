@@ -5,9 +5,8 @@
 */
 
 echo "begin".PHP_EOL;
-$aConfig = include('./config.php');
 
-$iForkNum = $aConfig['process_num'];
+$iForkNum = $aConfig['process_num'] = 2;
 $aChildPid = [];
 
 cli_set_process_title("lis master process");
